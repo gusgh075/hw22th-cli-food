@@ -30,4 +30,8 @@
         FROM tbl_menu
         WHERE menu_code = ?
     </entry>
+    <entry key="selectMenu">
+        SELECT *
+        FROM tbl_menu
+    </entry>
 </properties>

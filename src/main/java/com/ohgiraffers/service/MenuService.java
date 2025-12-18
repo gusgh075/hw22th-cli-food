@@ -4,29 +4,31 @@ import com.ohgiraffers.dto.MenuDTO;
 import com.ohgiraffers.repository.MenuRepository;
 
 import java.sql.Connection;
+import java.util.List;
 
 import static com.ohgiraffers.common.JDBCTemplate.*;
 
 /* Service 계층
-*   - 비즈니스 로직(데이터 가공, 트랜잭션 처리, Repository 호출)을 담당하는 계층
-* */
+ *   - 비즈니스 로직(데이터 가공, 트랜잭션 처리, Repository 호출)을 담당하는 계층
+ * */
 public class MenuService {
+  Connection con = getConnection();
+  MenuRepository menuRepository = new MenuRepository();
+  public List<MenuDTO> selectAllMenu(){
+    return menuRepository.selectAllMenu(con);
+  }
+  public int modifyMenu(MenuDTO modifyMenu) {
 
-    public int modifyMenu(MenuDTO modifyMenu) {
-        Connection con = getConnection();
+    // Repository 메서드를 호출하여 결과(1: 성공, 0: 실패) 반환
+    int result = menuRepository.updateMenu(con, modifyMenu);
 
-        MenuRepository menuRepository = new MenuRepository();
-
-        // Repository 메서드를 호출하여 결과(1: 성공, 0: 실패) 반환
-        int result = menuRepository.updateMenu(con, modifyMenu);
-
-        if (result > 0) {
-            commit(con);
-        }else {
-            rollback(con);
-        }
-
-        return result;
+    if (result > 0) {
+      commit(con);
+    } else {
+      rollback(con);
     }
+
+    return result;
+  }
 
 }
